@@ -1,0 +1,10 @@
+{
+  "name": "glasto-smasher",
+  "devDependencies": {
+    "puppeteer": "^19.2.0"
+  },
+  "scripts": {
+    "smash": "node scripts/glasto-smasher.js"
+  },
+  "type": "module"
+}
