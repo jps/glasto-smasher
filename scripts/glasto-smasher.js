@@ -2,11 +2,11 @@ import puppeteer from "puppeteer";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-const defaultPageTimeout = 1500;
+const browserStartupDelay = 1200;
+const defaultPageTimeout = 1200;
 
-const delay = (t, v) => {
+const delay = async (t, v) =>
   new Promise((resolve) => setTimeout(resolve, t, v));
-};
 
 const wrapPhrase = (phrase) => `//text()[contains(.,'${phrase}')]`;
 
@@ -19,7 +19,7 @@ const start = async (url, holdingPageTextXQuery) => {
   const page = await browser.newPage();
 
   console.log(`Waiting for the browser to open...`);
-  await delay(10000); // we wait for 10 seconds to let the browser open
+  await delay(browserStartupDelay); // we wait to let the browser open
 
   let attempt = 1;
   let shouldContinue = false;
@@ -43,7 +43,8 @@ const start = async (url, holdingPageTextXQuery) => {
       const instancesOfHoldingPageText = await page.$x(holdingPageTextXQuery);
 
       if (instancesOfHoldingPageText.length > 0) {
-        console.info(`completed attempt:${attempt} `);
+        console.info(`completed attempt:${attempt}`);
+        await delay(defaultPageTimeout);
         ++attempt;
         continue;
       }
@@ -89,11 +90,19 @@ await yargs(hideBin(process.argv))
         conflicts: "xpath",
         demandOption: false,
       },
+      delay: {
+        alias: "d",
+        type: "number",
+        description:
+          "wait this amount of time between each reload to prevent getting rate limited",
+        demandOption: false,
+        default: defaultPageTimeout
+      },
     },
     (async (argv) => {
       console.log("pre start");
       const { url, xpath, phrase } = argv;
-      if(!xpath && !phrase){
+      if (!xpath && !phrase) {
         console.error("either xpath or phrase must be supplied");
         return;
       }
@@ -102,17 +111,5 @@ await yargs(hideBin(process.argv))
   )
   .help()
   .alias("help", "h").argv;
-
-// const testMode = true;
-
-// //const registrationPhrase = "Please enter your registration details"
-// //const depositUrl = "https://glastonbury.seetickets.com/event/glastonbury-2020-deposits/worthy-farm/1450000"
-// const depositUrl = testMode
-//   ? "http://172.29.183.191:3000/"
-//   : "https://glastonbury.seetickets.com/event/glastonbury-2020-deposits/worthy-farm/1450000";
-
-// const holdingPageTextXQuery = testMode
-//   ? "//text()[contains(.,'Number of hits')]"
-//   : "//text()[contains(.,'lore ipsum')]";
 
 console.info('exit');

@@ -20,19 +20,19 @@ Recommend install on Linux or Mac, Windows is possible but you will need to inst
 
 ## Running the app
 
-open your terminal and clone the repo
+Open your terminal and clone the repo
 
 ```bash
 git clone git@github.com:jps/glasto-smasher.git
 ```
 
-navigate to the cloned repo
+Navigate to the cloned repo
 
 ```bash
 cd glasto-smasher
 ```
 
-install the dependencies
+Install the dependencies
 
 ```bash
 yarn
@@ -42,17 +42,18 @@ yarn
 
 A test site is available, by pulling and running https://github.com/thomasms/testsites
 
-open a second terminal and enter the following
+Open a second terminal and enter each of the following
 
 ```bash
 git clone https://github.com/thomasms/testsites
 cd testsites
+yarn
 yarn start
 ```
 
-once started the site will report a url that it's running on this can be added to the test script below
+Once started the site will report a url that it's running on this can be added to the test script below
 
-now you can run the script local with
+Now you can run the script local with
 
 ```bash
 yarn smash --url http://localhost:3000/ --phrase 'Number of hits'
@@ -65,13 +66,13 @@ You will need to input the url of holding page, this will be the page that is re
 Next you will need to put in a piece of text that will only appear on the loading page, this will be something like `this page will refresh automatically`
 you can also add an [xpath](https://developer.mozilla.org/en-US/docs/Web/XPath) here e.g `//text()[contains(.,'this page will refresh automatically')]`
 
-giving us either
+Giving us either:
 
 ```bash
 yarn smash --url 'https://glastonbury.seetickets.com/event/glastonbury-2020-deposits/worthy-farm/1450000' --phrase 'this page will refresh automatically'
 ```
 
-or for xpath
+Or for xpath:
 
 ```bash
 yarn smash --url 'https://glastonbury.seetickets.com/event/glastonbury-2020-deposits/worthy-farm/1450000' --xpath "//text()[contains(.,'this page will refresh automatically')]"
